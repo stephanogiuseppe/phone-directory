@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="phoneDirectory">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <link rel="stylesheet" href="lib/bootstrap/bootstrap.min.css">
+        <script src="lib/angularjs/angular.js"></script>
+        <title>Document</title>
+
+        <script>
+            angular.module("phoneDirectory", []);
+            angular.module("phoneDirectory").controller("phoneDirectoryCtrl", function($scope) {
+                $scope.app = "Phone Directory";
+            });
+        </script>
+    </head>
+    <body ng-controller="phoneDirectoryCtrl">
+        <div>
+            <h1 ng-bind="app"></h1>
+        </div>
+    </body>
+</html>
