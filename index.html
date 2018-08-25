@@ -4,20 +4,63 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <link rel="stylesheet" href="lib/bootstrap/bootstrap.min.css">
-        <script src="lib/angularjs/angular.js"></script>
         <title>Document</title>
+
+        <link rel="stylesheet" href="lib/bootstrap/bootstrap.min.css">
+
+        <style>
+            .jumbotron {
+                width: 500px;
+                text-align: center;
+                margin: 10px auto;
+            }
+
+            .form-control, .btn {
+                margin: 5px 0 0 0;
+            }
+        </style>
+
+        <script src="lib/angularjs/angular.js"></script>
 
         <script>
             angular.module("phoneDirectory", []);
-            angular.module("phoneDirectory").controller("phoneDirectoryCtrl", function($scope) {
+            angular.module("phoneDirectory").controller("phoneDirectoryCtrl", ($scope) => {
                 $scope.app = "Phone Directory";
+                $scope.contacts = [
+                    { name: 'Stephano', phone: '+55 13 99999-6666' },
+                    { name: 'Giuseppe', phone: '+55 13 96666-6666' },
+                    { name: 'Maria', phone: '+55 13 96666-9999' },
+                    { name: 'Joao', phone: '+55 13 99999-9999' }
+                ];
+
+                $scope.addContact = (contact) => {
+                    $scope.contacts.push(angular.copy(contact));
+                    delete $scope.contact;
+                };
             });
         </script>
     </head>
     <body ng-controller="phoneDirectoryCtrl">
-        <div>
-            <h1 ng-bind="app"></h1>
+        <div class="jumbotron">
+            <h1> {{ app }} </h1>
+            <table class="table table-striped">
+                <tr>
+                    <th>Name</th>
+                    <th>Phone</th>
+                </tr>
+                <tr ng-repeat="contact in contacts">
+                    <td ng-repeat="(key, value) in contact">
+                        {{ value }}
+                    </td>
+                </tr>
+            </table>
+
+            <hr>
+
+            <input class="form-control" type="text" name="name" id="name" ng-model="contact.name" />
+            <input class="form-control" type="text" name="phone" id="phone" ng-model="contact.phone" />
+
+            <button class="btn btn-primary btn-block" ng-click="addContact(contact)">Add contact</button>
         </div>
     </body>
 </html>
