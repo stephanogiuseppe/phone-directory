@@ -37,27 +37,28 @@
 
         <script>
             angular.module("phoneDirectory", []);
-            angular.module("phoneDirectory").controller("phoneDirectoryCtrl", ($scope) => {
+            angular.module("phoneDirectory").controller("phoneDirectoryCtrl", ($scope, $filter) => {
                 $scope.app = "Phone Directory";
 
                 $scope.contacts = [
-                    { name: 'Stephano', phone: '+55 13 99999-6666', color: "lightseagreen" },
-                    { name: 'Giuseppe', phone: '+55 13 96666-6666', color: "lightsalmon" },
-                    { name: 'Maria', phone: '+55 13 96666-9999', color: "lightgoldenrodyellow" },
-                    { name: 'Joao', phone: '+55 13 99999-9999', color: "lightgray" }
+                    { name: 'Stephano', phone: '+55 13 99999-6666', phoneProvider: { name: 'Claro' }, color: "lightseagreen" },
+                    { name: 'Giuseppe', phone: '+55 13 96666-6666', phoneProvider: { name: 'Claro' }, color: "lightsalmon" },
+                    { name: 'Maria', phone: '+55 13 96666-9999', phoneProvider: { name: 'Claro' }, color: "lightgoldenrodyellow" },
+                    { name: 'Joao', phone: '+55 13 99999-9999', phoneProvider: { name: 'Claro' }, color: "lightgray" }
                 ];
 
                 $scope.phoneProviders = [
-                    { name: 'Oi', code: 14, category: 'Celphone'},
-                    { name: 'Vivo', code: 15, category: 'Celphone'},
-                    { name: 'Tim', code: 41, category: 'Celphone'},
-                    { name: 'GVT', code: 25, category: 'Telephone'},
-                    { name: 'Embratel', code: 21, category: 'Telephone'}
+                    { name: 'Oi', code: 14, category: 'Celphone', price: 1 },
+                    { name: 'Vivo', code: 15, category: 'Celphone', price: 2 },
+                    { name: 'Tim', code: 41, category: 'Celphone', price: 2 },
+                    { name: 'GVT', code: 25, category: 'Telephone', price: 2 },
+                    { name: 'Embratel', code: 21, category: 'Telephone', price: 1 }
                 ];
 
                 $scope.addContact = (contact) => {
                     $scope.contacts.push(angular.copy(contact));
                     delete $scope.contact;
+                    $scope.contactForm.$setPrestine();
                 };
 
                 $scope.removeContact = (contacts) => {
@@ -71,9 +72,10 @@
                         return contact.selected
                     });
                 }
-                
-                $scope.formIsValid = (name, phone) => {
-                    return !(name && phone);
+
+                $scope.orderBy = (field) => {
+                    $scope.orderSelected = field;
+                    $scope.direction = !$scope.direction;
                 }
             });
         </script>
@@ -81,14 +83,15 @@
     <body ng-controller="phoneDirectoryCtrl">
         <div class="jumbotron">
             <h1> {{ app }} </h1>
+            <input type="text" class="form-control" ng-model="search" placeholder="Search">
             <table class="table" ng-show="contacts.length > 0">
                 <tr>
                     <th></th>
-                    <th>Name</th>
-                    <th>Phone</th>
+                    <th><a href="" ng-click="orderBy('name')"> Name</a></th>
+                    <th><a href="" ng-click="orderBy('phone')">Phone</a></th>
                     <th>Phone Provider</th>
                 </tr>
-                <tr ng-repeat="contact in contacts" ng-class="{ 'selected bolder': contact.selected }">
+                <tr ng-repeat="contact in contacts | filter: { name: search } | orderBy: orderSelected: direction" ng-class="{ 'selected bolder': contact.selected }">
                     <td> <input type="checkbox" name="" id="" ng-model="contact.selected"> </td>
                     <td>{{ contact.name }}</td>
                     <td>{{ contact.phone }}</td>
@@ -99,18 +102,29 @@
 
             <hr>
 
-            <input class="form-control" type="text" name="name" id="name" ng-model="contact.name" />
-            <input class="form-control" type="text" name="phone" id="phone" ng-model="contact.phone" />
+            <form name="contactForm">
+                <input class="form-control" type="text" name="name" id="name" ng-model="contact.name" placeholder="Name" ng-required="true" ng-minlength="3" />
+                <input class="form-control" type="text" name="phone" id="phone" ng-model="contact.phone" placeholder="Phone" ng-required="true" ng-pattern="/^\d{4,5}-\d{4}$/" />
+                <select name="phoneProvider" id="phoneProvider" class="form-control"
+                  ng-model="contact.phoneProvider"
+                  ng-options="phoneProvider.name + ' (' + ( phoneProvider.price | currency) + ')' group by phoneProvider.category for phoneProvider in phoneProviders | orderBy: 'name'">
+                    <option value="">Select a phone provider</option>
+                </select>
+            </form>
 
-            <select name="phoneProvider" id="phoneProvider" class="form-control"
-              ng-model="contact.phoneProvider"
-              ng-options="phoneProvider.name group by phoneProvider.category for phoneProvider in phoneProviders">
-                <option value="">Select a phone provider</option>
-            </select>
+            <div class="alert alert-danger" ng-show="contactForm.$error.required && contactForm.$dirty">
+                Attention, the fields 'name' and 'phone number' not to be empty
+            </div>
+            <div class="alert alert-danger" ng-show="contactForm.$error.minlength">
+                The 'name' field must be 10 caracters or more
+            </div>
+            <div class="alert alert-danger" ng-show="contactForm.$error.pattern">
+                The 'phone' field must have the pattern '99999-9999'
+            </div>
 
             <button class="btn btn-primary btn-block"
               ng-click="addContact(contact)"
-              ng-disabled="formIsValid(contact.name, contact.phone)">Add contact</button>
+              ng-disabled="contactForm.$invalid">Add contact</button>
 
             <button class="btn btn-danger btn-block"
               ng-click="removeContact(contacts)"
