@@ -7,86 +7,11 @@
         <title>Document</title>
 
         <link rel="stylesheet" href="lib/bootstrap/bootstrap.min.css">
-
-        <style>
-            .jumbotron {
-                width: 600px;
-                text-align: center;
-                margin: 10px auto;
-            }
-
-            .form-control, .btn {
-                margin: 5px 0 0 0;
-            }
-
-            .selected {
-                background-color: khaki;
-            }
-
-            .bolder {
-                font-weight: 900;
-            }
-
-            .colorBox {
-                width: 20px;
-                height: 20px;
-            }
-        </style>
+        <link rel="stylesheet" href="phone-directory/phone.css">
 
         <script src="lib/angularjs/angular.js"></script>
-
-        <script>
-            angular.module("phoneDirectory", []);
-            angular.module("phoneDirectory").controller("phoneDirectoryCtrl", ($scope, $filter, $http) => {
-                $scope.app = "Phone Directory";
-
-                $scope.contacts = [];
-
-                $scope.phoneProviders = [];
-
-                var loadContacts = (loadContacts = () => {
-                    $http.get('http://localhost:3412/contacts').then((contactsResponse) => {
-                        $scope.contacts = contactsResponse.data;
-                    });
-                    return loadContacts;
-                })();
-
-                var loadPhoneProviders = (() => {
-                    $http.get('http://localhost:3412/phone-providers').then((phoneProvidersResponse) => {
-                        $scope.phoneProviders = phoneProvidersResponse.data;
-                    });
-                })();
-                
-                var saveContacts = (contact) => {
-                    $http.post('http://localhost:3412/contacts', contact).then((contactResponse) => {
-                        delete $scope.contact;
-                        $scope.contactForm.$setPristine();
-                        loadContacts();
-                    });
-                };
-
-                $scope.addContact = (contact) => {
-                    saveContacts(contact);
-                };
-
-                $scope.removeContact = (contacts) => {
-                    $scope.contacts = contacts.filter((contact) => {
-                        return !contact.selected;
-                    });
-                }
-
-                $scope.hasContactSelected = (contacts) => {
-                    return contacts.some((contact) => {
-                        return contact.selected
-                    });
-                }
-
-                $scope.orderBy = (field) => {
-                    $scope.orderSelected = field;
-                    $scope.direction = !$scope.direction;
-                }
-            });
-        </script>
+        <script src="app.js"></script>
+        <script src="phone-directory/phone.controller.js"></script>
     </head>
     <body ng-controller="phoneDirectoryCtrl">
         <div class="jumbotron">

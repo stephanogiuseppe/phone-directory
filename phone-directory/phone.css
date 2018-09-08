@@ -1,0 +1,22 @@
+.jumbotron {
+    width: 600px;
+    text-align: center;
+    margin: 10px auto;
+}
+
+.form-control, .btn {
+    margin: 5px 0 0 0;
+}
+
+.selected {
+    background-color: khaki;
+}
+
+.bolder {
+    font-weight: 900;
+}
+
+.colorBox {
+    width: 20px;
+    height: 20px;
+}
