@@ -33,13 +33,15 @@ var createRouter = (port) => {
             body.push(chunk);
         });
 
-        req.on('end', (chunk) => {
+        req.on('end', () => {
             req.body = Buffer.concat(body).toString();
             next();
         });
     };
 
     http.createServer((req, res) => {
+
+        console.log(req.url);
 
         handleBody(req, res, () => {
             executeInterceptors(0, req, res);
@@ -48,7 +50,7 @@ var createRouter = (port) => {
                 res.statusCode = 404;
                 return res.end();
             }
-            routes[req.method][req.url](res, res);
+            routes[req.method][req.url](req, res);
         });
 
     }).listen(port);
