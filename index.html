@@ -37,28 +37,36 @@
 
         <script>
             angular.module("phoneDirectory", []);
-            angular.module("phoneDirectory").controller("phoneDirectoryCtrl", ($scope, $filter) => {
+            angular.module("phoneDirectory").controller("phoneDirectoryCtrl", ($scope, $filter, $http) => {
                 $scope.app = "Phone Directory";
 
-                $scope.contacts = [
-                    { name: 'Stephano', phone: '+55 13 99999-6666', phoneProvider: { name: 'Claro' }, color: "lightseagreen" },
-                    { name: 'Giuseppe', phone: '+55 13 96666-6666', phoneProvider: { name: 'Claro' }, color: "lightsalmon" },
-                    { name: 'Maria', phone: '+55 13 96666-9999', phoneProvider: { name: 'Claro' }, color: "lightgoldenrodyellow" },
-                    { name: 'Joao', phone: '+55 13 99999-9999', phoneProvider: { name: 'Claro' }, color: "lightgray" }
-                ];
+                $scope.contacts = [];
 
-                $scope.phoneProviders = [
-                    { name: 'Oi', code: 14, category: 'Celphone', price: 1 },
-                    { name: 'Vivo', code: 15, category: 'Celphone', price: 2 },
-                    { name: 'Tim', code: 41, category: 'Celphone', price: 2 },
-                    { name: 'GVT', code: 25, category: 'Telephone', price: 2 },
-                    { name: 'Embratel', code: 21, category: 'Telephone', price: 1 }
-                ];
+                $scope.phoneProviders = [];
+
+                var loadContacts = (loadContacts = () => {
+                    $http.get('http://localhost:3412/contacts').then((contactsResponse) => {
+                        $scope.contacts = contactsResponse.data;
+                    });
+                    return loadContacts;
+                })();
+
+                var loadPhoneProviders = (() => {
+                    $http.get('http://localhost:3412/phone-providers').then((phoneProvidersResponse) => {
+                        $scope.phoneProviders = phoneProvidersResponse.data;
+                    });
+                })();
+                
+                var saveContacts = (contact) => {
+                    $http.post('http://localhost:3412/contacts', contact).then((contactResponse) => {
+                        delete $scope.contact;
+                        $scope.contactForm.$setPristine();
+                        loadContacts();
+                    });
+                };
 
                 $scope.addContact = (contact) => {
-                    $scope.contacts.push(angular.copy(contact));
-                    delete $scope.contact;
-                    $scope.contactForm.$setPrestine();
+                    saveContacts(contact);
                 };
 
                 $scope.removeContact = (contacts) => {
@@ -130,6 +138,6 @@
               ng-click="removeContact(contacts)"
               ng-disabled="!hasContactSelected(contacts)">Remove contact</button>
         </div>
-        <div ng-include="'footer.html'"></div>
+        <!-- div ng-include="'footer.html'"></div-->
     </body>
 </html>
