@@ -1,5 +1,5 @@
 angular.module("phoneDirectory").filter("ellipsisFilter", (config) => {
-    return (input, size = config.limitDisplayNameDefault) => {
+    return (input, size = config.defaultLimitDisplayName) => {
         if (input.length <= size) {
             return input;
         }

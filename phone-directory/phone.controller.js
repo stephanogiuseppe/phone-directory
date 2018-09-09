@@ -1,5 +1,7 @@
-angular.module("phoneDirectory").controller("phoneDirectoryCtrl", ($scope, phoneService) => {
-    $scope.app = "Phone Directory";
+angular.module('phoneDirectory').controller('phoneDirectoryCtrl', ($scope, phoneService, config) => {
+    $scope.app = 'Phone Directory';
+    $scope.defaultErrorMessage = config.defaultErrorMessage;
+    $scope.errorMessageMessage = null;
 
     $scope.contacts = [];
 
@@ -8,6 +10,9 @@ angular.module("phoneDirectory").controller("phoneDirectoryCtrl", ($scope, phone
     var loadContacts = (loadContacts = () => {
         phoneService.getContacts().then((contactsResponse) => {
             $scope.contacts = contactsResponse.data;
+            $scope.errorMessage = null;
+        }).catch(() => {
+            $scope.errorMessage = `${ config.loadErrorMessage } contacts list`
         });
         return loadContacts;
     })();
@@ -15,6 +20,9 @@ angular.module("phoneDirectory").controller("phoneDirectoryCtrl", ($scope, phone
     var loadPhoneProviders = (() => {
         phoneService.getPhoneProviders().then((phoneProvidersResponse) => {
             $scope.phoneProviders = phoneProvidersResponse.data;
+            $scope.errorMessage = null;
+        }).catch(() => {
+            $scope.errorMessage = `${ config.loadErrorMessage } phone providers list`
         });
     })();
     
@@ -22,7 +30,10 @@ angular.module("phoneDirectory").controller("phoneDirectoryCtrl", ($scope, phone
         phoneService.createContact(contact).then((contactResponse) => {
             delete $scope.contact;
             $scope.contactForm.$setPristine();
+            $scope.errorMessage = null;
             loadContacts();
+        }).catch(() => {
+            $scope.errorMessage = `${ config.saveErrorMessage } contact`
         });
     };
 

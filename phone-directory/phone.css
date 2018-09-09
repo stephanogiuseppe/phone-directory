@@ -20,3 +20,20 @@
     width: 20px;
     height: 20px;
 }
+
+.ui-alert {
+    background-color: #F2DEDE;
+    padding: 20px;
+    border-radius: 5px;
+    margin: 20px 0;
+}
+
+.ui-alert-title {
+    color: #AF4343;
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.ui-alert-message {
+    color: #AF4343;
+}
