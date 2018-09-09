@@ -8,6 +8,7 @@
 
         <link rel="stylesheet" href="lib/bootstrap/bootstrap.min.css">
         <link rel="stylesheet" href="phone-directory/phone.css">
+        <link rel="stylesheet" href="shared/styles/ui-styles.css">
 
         <script src="lib/angularjs/angular.js"></script>
         <script src="app.js"></script>
@@ -18,6 +19,7 @@
         <script src="shared/filters/ellipsis.filter.js"></script>
         <script src="shared/directives/alert.directive.js"></script>
         <script src="shared/directives/date.directive.js"></script>
+        <script src="shared/directives/accordion.directive.js"></script>
     </head>
     <body ng-controller="phoneDirectoryCtrl">
         <div class="jumbotron">
@@ -46,34 +48,39 @@
 
             <hr>
 
-            <form name="contactForm">
-                <input class="form-control" type="text" name="name" id="name" ng-model="contact.name" placeholder="Name" ng-required="true" ng-minlength="3" />
-                <input class="form-control" type="text" name="phone" id="phone" ng-model="contact.phone" placeholder="Phone" ng-required="true" ng-pattern="/^\d{4,5}-\d{4}$/" />
-                <!-- input class="form-control" type="text" name="date" id="date" ng-model="contact.date" placeholder="Date" ng-required="true" ui-date /-->
-                <select name="phoneProvider" id="phoneProvider" class="form-control"
-                  ng-model="contact.phoneProvider"
-                  ng-options="phoneProvider.name + ' (' + ( phoneProvider.price | currency) + ')' group by phoneProvider.category for phoneProvider in phoneProviders | orderBy: 'name'">
-                    <option value="">Select a phone provider</option>
-                </select>
-            </form>
+            <ui-accordions>
+                <ui-accordion title="Form contact">
+                    <form name="contactForm">
+                        <input class="form-control" type="text" name="name" id="name" ng-model="contact.name" placeholder="Name" ng-required="true" ng-minlength="3" />
+                        <input class="form-control" type="text" name="phone" id="phone" ng-model="contact.phone" placeholder="Phone" ng-required="true" ng-pattern="/^\d{4,5}-\d{4}$/" />
+                        <!-- input class="form-control" type="text" name="date" id="date" ng-model="contact.date" placeholder="Date" ng-required="true" ui-date /-->
+                        <select name="phoneProvider" id="phoneProvider" class="form-control"
+                            ng-model="contact.phoneProvider"
+                            ng-options="phoneProvider.name + ' (' + ( phoneProvider.price | currency) + ')' group by phoneProvider.category for phoneProvider in phoneProviders | orderBy: 'name'">
+                            <option value="">Select a phone provider</option>
+                        </select>
+                    </form>
 
-            <div class="alert alert-danger" ng-show="contactForm.$error.required && contactForm.$dirty">
-                Attention, the fields 'name' and 'phone number' not to be empty
-            </div>
-            <div class="alert alert-danger" ng-show="contactForm.$error.minlength">
-                The 'name' field must be 10 caracters or more
-            </div>
-            <div class="alert alert-danger" ng-show="contactForm.$error.pattern">
-                The 'phone' field must have the pattern '99999-9999'
-            </div>
+                    <div class="alert alert-danger" ng-show="contactForm.$error.required && contactForm.$dirty">
+                        Attention, the fields 'name' and 'phone number' not to be empty
+                    </div>
+                    <div class="alert alert-danger" ng-show="contactForm.$error.minlength">
+                        The 'name' field must be 10 caracters or more
+                    </div>
+                    <div class="alert alert-danger" ng-show="contactForm.$error.pattern">
+                        The 'phone' field must have the pattern '99999-9999'
+                    </div>
+        
+                    <button class="btn btn-primary btn-block"
+                      ng-click="addContact(contact)"
+                      ng-disabled="contactForm.$invalid">Add contact</button>
+        
+                    <button class="btn btn-danger btn-block"
+                      ng-click="removeContact(contacts)"
+                      ng-disabled="!hasContactSelected(contacts)">Remove contact</button>
+                </ui-accordion>
+            </ui-accordions>
 
-            <button class="btn btn-primary btn-block"
-              ng-click="addContact(contact)"
-              ng-disabled="contactForm.$invalid">Add contact</button>
-
-            <button class="btn btn-danger btn-block"
-              ng-click="removeContact(contacts)"
-              ng-disabled="!hasContactSelected(contacts)">Remove contact</button>
         </div>
         <!-- div ng-include="'footer.html'"></div-->
     </body>

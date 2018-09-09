@@ -12,6 +12,6 @@ angular.module('phoneDirectory').directive('uiAlert', () => {
                         "    {{ title }}" +
                         "</div>" +
                         "<div class='ui-alert-message' ng-transclude></div>" +
-                    "</div>'"
+                    "</div>"
     };
 })
