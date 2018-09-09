@@ -1,4 +1,4 @@
-angular.module("phoneDirectory").controller("phoneDirectoryCtrl", ($scope, $filter, $http) => {
+angular.module("phoneDirectory").controller("phoneDirectoryCtrl", ($scope, phoneService) => {
     $scope.app = "Phone Directory";
 
     $scope.contacts = [];
@@ -6,28 +6,24 @@ angular.module("phoneDirectory").controller("phoneDirectoryCtrl", ($scope, $filt
     $scope.phoneProviders = [];
 
     var loadContacts = (loadContacts = () => {
-        $http.get('http://localhost:3412/contacts').then((contactsResponse) => {
+        phoneService.getContacts().then((contactsResponse) => {
             $scope.contacts = contactsResponse.data;
         });
         return loadContacts;
     })();
 
     var loadPhoneProviders = (() => {
-        $http.get('http://localhost:3412/phone-providers').then((phoneProvidersResponse) => {
+        phoneService.getPhoneProviders().then((phoneProvidersResponse) => {
             $scope.phoneProviders = phoneProvidersResponse.data;
         });
     })();
     
-    var saveContacts = (contact) => {
-        $http.post('http://localhost:3412/contacts', contact).then((contactResponse) => {
+    $scope.addContact = (contact) => {
+        phoneService.createContact(contact).then((contactResponse) => {
             delete $scope.contact;
             $scope.contactForm.$setPristine();
             loadContacts();
         });
-    };
-
-    $scope.addContact = (contact) => {
-        saveContacts(contact);
     };
 
     $scope.removeContact = (contacts) => {
