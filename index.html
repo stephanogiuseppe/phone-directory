@@ -17,6 +17,7 @@
         <script src="shared/filters/name.filter.js"></script>
         <script src="shared/filters/ellipsis.filter.js"></script>
         <script src="shared/directives/alert.directive.js"></script>
+        <script src="shared/directives/date.directive.js"></script>
     </head>
     <body ng-controller="phoneDirectoryCtrl">
         <div class="jumbotron">
@@ -48,6 +49,7 @@
             <form name="contactForm">
                 <input class="form-control" type="text" name="name" id="name" ng-model="contact.name" placeholder="Name" ng-required="true" ng-minlength="3" />
                 <input class="form-control" type="text" name="phone" id="phone" ng-model="contact.phone" placeholder="Phone" ng-required="true" ng-pattern="/^\d{4,5}-\d{4}$/" />
+                <!-- input class="form-control" type="text" name="date" id="date" ng-model="contact.date" placeholder="Date" ng-required="true" ui-date /-->
                 <select name="phoneProvider" id="phoneProvider" class="form-control"
                   ng-model="contact.phoneProvider"
                   ng-options="phoneProvider.name + ' (' + ( phoneProvider.price | currency) + ')' group by phoneProvider.category for phoneProvider in phoneProviders | orderBy: 'name'">
