@@ -15,6 +15,7 @@
         <script src="phone-directory/phone.controller.js"></script>
         <script src="phone-directory/phone.service.js"></script>
         <script src="shared/name.filter.js"></script>
+        <script src="shared/ellipsis.filter.js"></script>
     </head>
     <body ng-controller="phoneDirectoryCtrl">
         <div class="jumbotron">
@@ -29,7 +30,7 @@
                 </tr>
                 <tr ng-repeat="contact in contacts | filter: { name: search } | orderBy: orderSelected: direction" ng-class="{ 'selected bolder': contact.selected }">
                     <td> <input type="checkbox" name="" id="" ng-model="contact.selected"> </td>
-                    <td>{{ contact.name | nameFilter }}</td>
+                    <td>{{ contact.name | nameFilter | ellipsisFilter: 10 }}</td>
                     <td>{{ contact.phone }}</td>
                     <td>{{ contact.phoneProvider.name }}</td>
                     <td> <div class="colorBox" ng-style="{ 'background-color': contact.color }"></div> </td>
