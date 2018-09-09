@@ -21,7 +21,10 @@
     <body ng-controller="phoneDirectoryCtrl">
         <div class="jumbotron">
             <h1> {{ app }} </h1>
-            <div alert></div>
+
+            <ui-alert title="{{ defaultErrorMessage }}" message="{{ errorMessage }}">
+                {{ errorMessage }}
+            </ui-alert>
 
             <input type="text" class="form-control" ng-model="search" placeholder="Search">
             <table class="table" ng-show="contacts.length > 0">

@@ -1,7 +1,7 @@
 angular.module('phoneDirectory').controller('phoneDirectoryCtrl', ($scope, phoneService, config) => {
     $scope.app = 'Phone Directory';
     $scope.defaultErrorMessage = config.defaultErrorMessage;
-    $scope.errorMessageMessage = null;
+    $scope.errorMessage = null;
 
     $scope.contacts = [];
 

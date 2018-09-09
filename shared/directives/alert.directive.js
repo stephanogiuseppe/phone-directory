@@ -1,12 +1,17 @@
-angular.module('phoneDirectory').directive('alert', () => {
+angular.module('phoneDirectory').directive('uiAlert', () => {
     return {
+        restrict: 'AE',
+        replace: false,
+        scope: {
+            title: '@',
+            errorMessage: '@message'
+        },
+        transclude: true,
         template:   "<div class='ui-alert' ng-if='errorMessage'>" +
                         "<div class='ui-alert-title'>" +
-                        "        {{ defaultErrorMessage }}" +
+                        "    {{ title }}" +
                         "</div>" +
-                        "<div class='ui-alert-message'>" +
-                        "    {{ errorMessage }}" +
-                        "</div>" +
-                    "</div>'" 
+                        "<div class='ui-alert-message' ng-transclude></div>" +
+                    "</div>'"
     };
 })
