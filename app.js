@@ -1,1 +1,1 @@
-angular.module("phoneDirectory", []);
+angular.module("phoneDirectory", ['ui']);

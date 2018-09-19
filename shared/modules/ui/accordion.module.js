@@ -1,4 +1,5 @@
-angular.module('phoneDirectory').directive('uiAccordions', () => {
+angular.module('ui', []);
+angular.module('ui').directive('uiAccordions', () => {
     return {
         controller: function ($scope, $element, $attrs) {
             var accordions = [];
@@ -16,7 +17,7 @@ angular.module('phoneDirectory').directive('uiAccordions', () => {
     };
 });
 
-angular.module('phoneDirectory').directive('uiAccordion', () => {
+angular.module('ui').directive('uiAccordion', () => {
     return {
         require: '^uiAccordions',
         restrict: 'AE',
