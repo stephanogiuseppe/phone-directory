@@ -1,1 +1,1 @@
-angular.module("phoneDirectory", ['ui']);
+angular.module("phoneDirectory", ['ngRoute', 'ui']);

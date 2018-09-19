@@ -1,0 +1,60 @@
+<div class="jumbotron" ng-controller="phoneDirectoryCtrl">
+    <h1> {{ app }} </h1>
+
+    <ui-alert title="{{ defaultErrorMessage }}" message="{{ errorMessage }}">
+        {{ errorMessage }}
+    </ui-alert>
+
+    <input type="text" class="form-control" ng-model="search" placeholder="Search">
+    <table class="table" ng-show="contacts.length > 0">
+        <tr>
+            <th></th>
+            <th><a href="" ng-click="orderBy('name')">Name</a></th>
+            <th><a href="" ng-click="orderBy('phone')">Phone</a></th>
+            <th>Phone Provider</th>
+        </tr>
+        <tr ng-repeat="contact in contacts | filter: { name: search } | orderBy: orderSelected: direction" ng-class="{ 'selected bolder': contact.selected }">
+            <td> <input type="checkbox" name="" id="" ng-model="contact.selected"> </td>
+            <td>{{ contact.name | nameFilter | ellipsisFilter: 10 }}</td>
+            <td>{{ contact.phone }}</td>
+            <td>{{ contact.phoneProvider.name }}</td>
+            <td> <div class="colorBox" ng-style="{ 'background-color': contact.color }"></div> </td>
+        </tr>
+    </table>
+
+    <hr>
+
+    <ui-accordions>
+        <ui-accordion title="Form contact">
+            <form name="contactForm">
+                <input class="form-control" type="text" name="name" id="name" ng-model="contact.name" placeholder="Name" ng-required="true" ng-minlength="3" />
+                <input class="form-control" type="text" name="phone" id="phone" ng-model="contact.phone" placeholder="Phone" ng-required="true" ng-pattern="/^\d{4,5}-\d{4}$/" />
+                <!-- input class="form-control" type="text" name="date" id="date" ng-model="contact.date" placeholder="Date" ng-required="true" ui-date /-->
+                <select name="phoneProvider" id="phoneProvider" class="form-control"
+                    ng-model="contact.phoneProvider"
+                    ng-options="phoneProvider.name + ' (' + ( phoneProvider.price | currency) + ')' group by phoneProvider.category for phoneProvider in phoneProviders | orderBy: 'name'">
+                    <option value="">Select a phone provider</option>
+                </select>
+            </form>
+
+            <div class="alert alert-danger" ng-show="contactForm.$error.required && contactForm.$dirty">
+                Attention, the fields 'name' and 'phone number' not to be empty
+            </div>
+            <div class="alert alert-danger" ng-show="contactForm.$error.minlength">
+                The 'name' field must be 10 caracters or more
+            </div>
+            <div class="alert alert-danger" ng-show="contactForm.$error.pattern">
+                The 'phone' field must have the pattern '99999-9999'
+            </div>
+
+            <button class="btn btn-primary btn-block"
+                ng-click="addContact(contact)"
+                ng-disabled="contactForm.$invalid">Add contact</button>
+
+            <button class="btn btn-danger btn-block"
+                ng-click="removeContact(contacts)"
+                ng-disabled="!hasContactSelected(contacts)">Remove contact</button>
+        </ui-accordion>
+    </ui-accordions>
+
+</div>
